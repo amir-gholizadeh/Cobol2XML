@@ -47,6 +47,8 @@ public class CobolParser {
 		Symbol fullstop = new Symbol('.');
 		fullstop.discard();
 		
+		a.add( constantValue() );
+		
 		a.add( ProgramID() );
 		
 		a.add( DivisionName() );
@@ -59,6 +61,23 @@ public class CobolParser {
 		return a;
 	}
 	
+	/*
+	 * Return a parser that will recognize the grammar:
+	 * 
+	 *    <line number> <contstant name> "value" <constant value>.
+	 *
+	 */
+	protected Parser constantValue() {
+		//System.out.println("constantValue()");
+			Sequence s = new Sequence();
+			s.add(new Num() );
+			s.add(new Word() );
+			s.add(new CaselessLiteral("value") );
+			s.add(new Num() );
+			s.setAssembler(new ConstantValueAssembler());
+			return s;
+		}
+
 	/*
 	 * Return a parser that will recognize the grammar:
 	 * 
